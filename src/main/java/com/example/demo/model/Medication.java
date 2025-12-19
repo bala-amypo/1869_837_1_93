@@ -22,12 +22,14 @@ public class Medication {
     )
     private Set<ActiveIngredient> ingredients = new HashSet<>();
 
-    public Medication() {}
+    public Medication() {
+    }
 
     public Medication(String name) {
         this.name = name;
     }
 
+    // Helper methods
     public void addIngredient(ActiveIngredient ingredient) {
         this.ingredients.add(ingredient);
     }
@@ -37,4 +39,27 @@ public class Medication {
     }
 
     // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Set<ActiveIngredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIngredients(Set<ActiveIngredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 }
