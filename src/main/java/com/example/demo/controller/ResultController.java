@@ -1,3 +1,14 @@
+package com.example.demo.controller;
+
+import com.example.demo.service.InteractionResultService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/api/results")
 @Tag(name = "Results")
@@ -12,16 +23,12 @@ public class ResultController {
     @GetMapping("/{id}")
     @Operation(summary = "Get result by ID")
     public ResponseEntity<?> get(@PathVariable Long id) {
-        return ResponseEntity.ok(resultService.getResult(id));
+        return ResponseEntity.ok(resultService.getById(id));
     }
 
     @GetMapping
-    @Operation(summary = "List results by severity")
-    public ResponseEntity<?> list(
-            @RequestParam String severity,
-            Pageable pageable) {
-        return ResponseEntity.ok(
-                resultService.getBySeverity(severity, pageable)
-        );
+    @Operation(summary = "List results")
+    public ResponseEntity<?> list(Pageable pageable) {
+        return ResponseEntity.ok(resultService.getAll(pageable));
     }
 }

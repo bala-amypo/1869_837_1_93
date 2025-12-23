@@ -1,6 +1,17 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.InteractionEvaluateRequest;
+import com.example.demo.service.InteractionService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/api/evaluate")
-@Tag(name = "Evaluation")
+@Tag(name = "Interaction Evaluation")
 public class EvaluationController {
 
     private final InteractionService interactionService;
@@ -10,17 +21,8 @@ public class EvaluationController {
     }
 
     @PostMapping
-    @Operation(summary = "Evaluate drug interactions")
-    public ResponseEntity<?> evaluate(
-            @RequestBody InteractionEvaluateRequest req) {
-
-        if (req.isRunAsync()) {
-            return ResponseEntity.accepted()
-                    .body(Map.of("jobId", "ASYNC_NOT_IMPLEMENTED"));
-        }
-
-        return ResponseEntity.ok(
-                interactionService.evaluate(req.getDrugCodes())
-        );
+    @Operation(summary = "Evaluate interaction")
+    public ResponseEntity<?> evaluate(@RequestBody InteractionEvaluateRequest request) {
+        return ResponseEntity.ok(interactionService.evaluate(request));
     }
 }
