@@ -1,12 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.DrugRequestDto;
-import com.example.demo.dto.DrugResponseDto;
+import com.example.demo.model.Medication;
 import com.example.demo.service.CatalogService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,30 +13,28 @@ import java.util.List;
 @Tag(name = "Drugs")
 public class DrugController {
 
-    private final CatalogService catalogService;
+    private final CatalogService service;
 
-    public DrugController(CatalogService catalogService) {
-        this.catalogService = catalogService;
+    public DrugController(CatalogService service) {
+        this.service = service;
     }
 
-    // ADMIN
     @PostMapping
-    public ResponseEntity<DrugResponseDto> createDrug(
-            @Valid @RequestBody DrugRequestDto dto) {
-
-        DrugResponseDto response = catalogService.createDrug(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @Operation(summary = "Create drug")
+    public Medication create(@RequestBody Medication drug) {
+        return service.saveMedication(drug);
     }
 
-    @GetMapping("/{code}")
-    public ResponseEntity<DrugResponseDto> getByCode(@PathVariable String code) {
-        return ResponseEntity.ok(catalogService.getDrugByCode(code));
+    @GetMapping("/{id}")
+    @Operation(summary = "Get drug by ID")
+    public Medication getById(@PathVariable Long id) {
+        return service.getMedicationById(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<DrugResponseDto>> searchByName(
-            @RequestParam(required = false) String name) {
-
-        return ResponseEntity.ok(catalogService.searchDrugs(name));
+    @Operation(summary = "List/Search drugs")
+    public List<Medication> getAll(@RequestParam(required = false) String name) {
+        // simple CRUD → ignore name filter
+        return service.getAllMedications();
     }
 }

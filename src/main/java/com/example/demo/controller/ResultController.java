@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.InteractionResultDto;
+import com.example.demo.model.InteractionCheckResult;
 import com.example.demo.service.InteractionService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,25 +13,24 @@ import java.util.List;
 @Tag(name = "Results")
 public class ResultController {
 
-    private final InteractionService interactionService;
+    private final InteractionService service;
 
-    public ResultController(InteractionService interactionService) {
-        this.interactionService = interactionService;
+    public ResultController(InteractionService service) {
+        this.service = service;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InteractionResultDto> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(interactionService.getResultById(id));
+    @Operation(summary = "Get result by ID")
+    public InteractionCheckResult getById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<InteractionResultDto>> getHistory(
-            @RequestParam(required = false) String severity,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    @Operation(summary = "List results")
+    public List<InteractionCheckResult> getAll(
+            @RequestParam(required = false) String severity) {
 
-        return ResponseEntity.ok(
-                interactionService.getHistory(severity, page, size)
-        );
+        // CRUD only → ignore severity filter
+        return service.findAll();
     }
 }
