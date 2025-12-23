@@ -1,13 +1,15 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.InteractionRule;
+import com.example.demo.dto.InteractionRuleRequestDto;
+import com.example.demo.dto.InteractionRuleResponseDto;
 import com.example.demo.service.RuleService;
-
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/rules")
@@ -20,29 +22,35 @@ public class InteractionRuleController {
         this.ruleService = ruleService;
     }
 
+    // ADMIN
     @PostMapping
-    @Operation(summary = "Create rule")
-    public ResponseEntity<?> create(@RequestBody InteractionRule rule) {
-        return ResponseEntity.ok(ruleService.save(rule));
+    public ResponseEntity<InteractionRuleResponseDto> createRule(
+            @Valid @RequestBody InteractionRuleRequestDto dto) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ruleService.create(dto));
     }
 
     @GetMapping
-    @Operation(summary = "Get all rules")
-    public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(ruleService.getAll());
+    public ResponseEntity<List<InteractionRuleResponseDto>> listRules(
+            @RequestParam(required = false) String severity,
+            @RequestParam(required = false) Boolean enabled) {
+
+        return ResponseEntity.ok(ruleService.list(severity, enabled));
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update rule")
-    public ResponseEntity<?> update(@PathVariable Long id,
-                                    @RequestBody InteractionRule rule) {
-        return ResponseEntity.ok(ruleService.update(id, rule));
+    public ResponseEntity<InteractionRuleResponseDto> updateRule(
+            @PathVariable Long id,
+            @Valid @RequestBody InteractionRuleRequestDto dto) {
+
+        return ResponseEntity.ok(ruleService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete rule")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        ruleService.delete(id);
-        return ResponseEntity.ok("Deleted");
+    public ResponseEntity<Void> deleteRule(@PathVariable Long id) {
+        ruleService.deleteOrDisable(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,34 +1,37 @@
 package com.example.demo.controller;
 
-import com.example.demo.service.InteractionResultService;
-
-import io.swagger.v3.oas.annotations.Operation;
+import com.example.demo.dto.InteractionResultDto;
+import com.example.demo.service.InteractionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/results")
 @Tag(name = "Results")
 public class ResultController {
 
-    private final InteractionResultService resultService;
+    private final InteractionService interactionService;
 
-    public ResultController(InteractionResultService resultService) {
-        this.resultService = resultService;
+    public ResultController(InteractionService interactionService) {
+        this.interactionService = interactionService;
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get result by ID")
-    public ResponseEntity<?> get(@PathVariable Long id) {
-        return ResponseEntity.ok(resultService.getById(id));
+    public ResponseEntity<InteractionResultDto> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(interactionService.getResultById(id));
     }
 
     @GetMapping
-    @Operation(summary = "List results")
-    public ResponseEntity<?> list(Pageable pageable) {
-        return ResponseEntity.ok(resultService.getAll(pageable));
+    public ResponseEntity<List<InteractionResultDto>> getHistory(
+            @RequestParam(required = false) String severity,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                interactionService.getHistory(severity, page, size)
+        );
     }
 }
