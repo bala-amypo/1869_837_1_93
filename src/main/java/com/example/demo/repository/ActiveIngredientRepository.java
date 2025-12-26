@@ -4,4 +4,8 @@ import com.example.demo.model.ActiveIngredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ActiveIngredientRepository extends JpaRepository<ActiveIngredient, Long> {
+
+    boolean existsByName(String name);
+
+    ActiveIngredient findByName(String name);
 }

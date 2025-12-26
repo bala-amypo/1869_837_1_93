@@ -11,14 +11,13 @@ public class ActiveIngredient {
 
     private String name;
 
-    public ActiveIngredient(){}
+    public ActiveIngredient() {}
 
     public ActiveIngredient(Long id, String name){
         this.id = id;
         this.name = name;
     }
 
-    // test needs this
     public ActiveIngredient(String name){
         this.name = name;
     }

@@ -21,14 +21,14 @@ public class User {
 
     public User() {}
 
-    public User(Long id, String name, String email, String password){
+    public User(Long id, String name, String email, String password, String role){
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
-    // test needs this
     public User(String name, String email, String password, String role){
         this.name = name;
         this.email = email;
@@ -48,6 +48,6 @@ public class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getRole(){ return role; }
+    public void setRole(String role){ this.role = role; }
 }
