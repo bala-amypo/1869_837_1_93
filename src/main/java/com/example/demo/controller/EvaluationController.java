@@ -2,25 +2,25 @@ package com.example.demo.controller;
 
 import com.example.demo.model.InteractionCheckResult;
 import com.example.demo.service.InteractionService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/evaluate")
-@Tag(name = "Evaluation")
-public class EvaluationController {
+@RequestMapping("/api/interactions")
+public class InteractionController {
 
-    private final InteractionService service;
+    @Autowired
+    private InteractionService interactionService;
 
-    public EvaluationController(InteractionService service) {
-        this.service = service;
+    @PostMapping("/check")
+    public InteractionCheckResult check(@RequestBody List<Long> medicationIds){
+        return interactionService.checkInteractions(medicationIds);
     }
 
-    @PostMapping
-    @Operation(summary = "Evaluate drug interactions (CRUD mode)")
-    public InteractionCheckResult evaluate(@RequestBody InteractionCheckResult result) {
-        // No async, no logic — just save result
-        return service.save(result);
+    @GetMapping("/{id}")
+    public InteractionCheckResult getResult(@PathVariable Long id){
+        return interactionService.getResult(id);
     }
 }

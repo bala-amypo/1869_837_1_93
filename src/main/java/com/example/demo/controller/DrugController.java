@@ -1,40 +1,25 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.ActiveIngredient;
 import com.example.demo.model.Medication;
 import com.example.demo.service.CatalogService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/drugs")
-@Tag(name = "Drugs")
-public class DrugController {
+@RequestMapping("/api/catalog")
+public class CatalogController {
 
-    private final CatalogService service;
+    @Autowired
+    private CatalogService catalogService;
 
-    public DrugController(CatalogService service) {
-        this.service = service;
+    @PostMapping("/ingredient")
+    public ActiveIngredient addIngredient(@RequestBody ActiveIngredient ingredient){
+        return catalogService.addIngredient(ingredient);
     }
 
-    @PostMapping
-    @Operation(summary = "Create drug")
-    public Medication create(@RequestBody Medication drug) {
-        return service.saveMedication(drug);
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Get drug by ID")
-    public Medication getById(@PathVariable Long id) {
-        return service.getMedicationById(id);
-    }
-
-    @GetMapping
-    @Operation(summary = "List/Search drugs")
-    public List<Medication> getAll(@RequestParam(required = false) String name) {
-        // simple CRUD → ignore name filter
-        return service.getAllMedications();
+    @PostMapping("/medication")
+    public Medication addMedication(@RequestBody Medication medication){
+        return catalogService.addMedication(medication);
     }
 }
