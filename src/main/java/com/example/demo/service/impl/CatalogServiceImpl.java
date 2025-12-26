@@ -1,31 +1,15 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
-import com.example.demo.model.ActiveIngredient;
-import com.example.demo.model.Medication;
-import com.example.demo.repository.ActiveIngredientRepository;
-import com.example.demo.repository.MedicationRepository;
-import com.example.demo.service.CatalogService;
-import org.springframework.stereotype.Service;
+import com.example.demo.model.InteractionCheckResult;
+import java.util.List;
 
-@Service
-public class CatalogServiceImpl implements CatalogService {
+public interface InteractionService {
 
-    private final MedicationRepository medicationRepository;
-    private final ActiveIngredientRepository ingredientRepository;
+    void checkInteractions(List<Long> medicationIds);
+    String getResult(Long resultId);
 
-    public CatalogServiceImpl(MedicationRepository medRepo,
-                              ActiveIngredientRepository ingRepo){
-        this.medicationRepository = medRepo;
-        this.ingredientRepository = ingRepo;
-    }
-
-    @Override
-    public void addIngredient(ActiveIngredient ingredient){
-        ingredientRepository.save(ingredient);
-    }
-
-    @Override
-    public void addMedication(Medication medication){
-        medicationRepository.save(medication);
-    }
+    // Required by Evaluation & Result Controllers
+    InteractionCheckResult save(InteractionCheckResult result);
+    InteractionCheckResult findById(Long id);
+    List<InteractionCheckResult> findAll();
 }
