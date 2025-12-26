@@ -1,37 +1,37 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "interaction_results")
 public class InteractionCheckResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TESTS expect field logically named "result"
-    private String result;
+    private String medications;
+    private String interactions;
 
-    public InteractionCheckResult(){}
+    private LocalDateTime checkedAt = LocalDateTime.now();
 
-    public InteractionCheckResult(Long id, String result){
-        this.id = id;
-        this.result = result;
+    public InteractionCheckResult() {}
+
+    public InteractionCheckResult(String meds, String interactions) {
+        this.medications = meds;
+        this.interactions = interactions;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id){
-        this.id = id;
-    }
+    public String getMedications() { return medications; }
+    public void setMedications(String medications) { this.medications = medications; }
 
-    public String getResult(){
-        return result;
-    }
+    public String getInteractions() { return interactions; }
+    public void setInteractions(String interactions) { this.interactions = interactions; }
 
-    public void setResult(String result){
-        this.result = result;
-    }
+    public LocalDateTime getCheckedAt() { return checkedAt; }
+    public void setCheckedAt(LocalDateTime checkedAt) { this.checkedAt = checkedAt; }
 }

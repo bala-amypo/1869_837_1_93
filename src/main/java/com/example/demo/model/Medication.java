@@ -1,9 +1,11 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "medications")
 public class Medication {
 
     @Id
@@ -12,25 +14,36 @@ public class Medication {
 
     private String name;
 
-    @ManyToMany
-    private Set<ActiveIngredient> ingredients;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "medication_ingredients",
+            joinColumns = @JoinColumn(name = "medication_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
+    private Set<ActiveIngredient> ingredients = new HashSet<>();
 
-    public Medication(){}
+    public Medication() {}
 
-    public Medication(Long id, String name, Set<ActiveIngredient> ingredients){
-        this.id=id;
-        this.name=name;
-        this.ingredients=ingredients;
+    public Medication(String name) {
+        this.name = name;
     }
 
-    public Long getId(){ return id; }
-    public void setId(Long id){ this.id=id; }
+    public void addIngredient(ActiveIngredient ingredient) {
+        ingredients.add(ingredient);
+    }
 
-    public String getName(){ return name; }
-    public void setName(String name){ this.name=name; }
+    public void removeIngredient(ActiveIngredient ingredient) {
+        ingredients.remove(ingredient);
+    }
 
-    public Set<ActiveIngredient> getIngredients(){ return ingredients; }
-    public void setIngredients(Set<ActiveIngredient> ingredients){
-        this.ingredients=ingredients;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public Set<ActiveIngredient> getIngredients() { return ingredients; }
+    public void setIngredients(Set<ActiveIngredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }

@@ -3,7 +3,7 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -11,18 +11,21 @@ public class User {
     private Long id;
 
     private String name;
+
+    @Column(unique = true)
     private String email;
+
     private String password;
-    private String role;
+
+    private String role = "USER";
 
     public User() {}
 
-    public User(Long id, String name, String email, String password, String role) {
-        this.id = id;
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.role = "USER";
     }
 
     public Long getId() { return id; }
