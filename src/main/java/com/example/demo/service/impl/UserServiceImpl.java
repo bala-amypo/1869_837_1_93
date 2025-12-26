@@ -5,6 +5,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
@@ -15,7 +16,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        // save user to DB
+        // You can add password encoding here if needed
+        if(user.getRole() == null) {
+            user.setRole("USER"); // default role
+        }
         return userRepository.save(user);
     }
 

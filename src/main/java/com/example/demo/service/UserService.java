@@ -4,6 +4,6 @@ import com.example.demo.model.User;
 import java.util.Optional;
 
 public interface UserService {
-    User register(User user);          // ✅ Add this
-    Optional<User> findByEmail(String email); // Optional helper
+    User register(User user);
+    Optional<User> findByEmail(String email);
 }

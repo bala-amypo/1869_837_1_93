@@ -2,55 +2,38 @@ package com.example.demo.controller;
 
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
-import com.example.demo.util.JwtUtil;
-import org.springframework.security.authentication.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(AuthenticationManager authenticationManager,
-                          UserService userService,
-                          JwtUtil jwtUtil,
-                          PasswordEncoder passwordEncoder) {
-        this.authenticationManager = authenticationManager;
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    // REGISTER API
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER");
-        return userService.register(user);
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
+        User registeredUser = userService.register(user);
+        return ResponseEntity.ok("User registered with ID: " + registeredUser.getId());
     }
 
-    // LOGIN API
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
+        Optional<User> optionalUser = userService.findByEmail(user.getEmail());
+        if(optionalUser.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getEmail(),
-                        user.getPassword()
-                )
-        );
+        User dbUser = optionalUser.get();
 
-        User dbUser = userService.findByEmail(user.getEmail());
+        if(!dbUser.getPassword().equals(user.getPassword())) {
+            return ResponseEntity.badRequest().body("Invalid credentials");
+        }
 
-        return jwtUtil.generateToken(
-                dbUser.getEmail(),
-                dbUser.getId(),
-                dbUser.getRole()
-        );
+        return ResponseEntity.ok("Login successful. Role: " + dbUser.getRole());
     }
 }
