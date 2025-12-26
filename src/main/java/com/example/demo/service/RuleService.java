@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface RuleService {
 
+    InteractionRule addRule(InteractionRule rule);
+
     InteractionRule save(InteractionRule rule);
 
     List<InteractionRule> findAll();
-
-    InteractionRule findById(Long id);
 
     InteractionRule update(Long id, InteractionRule rule);
 
