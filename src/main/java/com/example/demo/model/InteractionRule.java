@@ -9,15 +9,12 @@ public class InteractionRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ingredientA;
-    private String ingredientB;
-    private String severity;
+    public InteractionRule() {}
 
-    public Long getId() { return id; }
-    public String getIngredientA() { return ingredientA; }
-    public void setIngredientA(String ingredientA) { this.ingredientA = ingredientA; }
-    public String getIngredientB() { return ingredientB; }
-    public void setIngredientB(String ingredientB) { this.ingredientB = ingredientB; }
-    public String getSeverity() { return severity; }
-    public void setSeverity(String severity) { this.severity = severity; }
+    public InteractionRule(Long id){
+        this.id = id;
+    }
+
+    public Long getId(){ return id; }
+    public void setId(Long id){ this.id = id; }
 }
