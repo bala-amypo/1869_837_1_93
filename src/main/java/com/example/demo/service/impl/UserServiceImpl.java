@@ -1,44 +1,30 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
+    @Override
+    public User registerUser(User user) {
+        if (user.getRole() == null) user.setRole("USER");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
-    public User save(User user) {
-        return repository.save(user);
-    }
-
-    public List<User> findAll() {
-        return repository.findAll();
-    }
-
-    public User findById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    public User update(Long id, User user) {
-        User existing = repository.findById(id).orElse(null);
-        if (existing != null) {
-            existing.setName(user.getName());
-            existing.setEmail(user.getEmail());
-            return repository.save(existing);
-        }
-        return null;
-    }
-
-    public void delete(Long id) {
-        repository.deleteById(id);
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
 }

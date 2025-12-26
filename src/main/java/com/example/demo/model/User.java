@@ -1,8 +1,14 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -10,11 +16,19 @@ public class User {
     private Long id;
 
     private String name;
+
+    @Column(unique = true)
     private String email;
 
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    private String password;
+
+    private String role;
+
+    // Constructor without id
+    public User(String name, String email, String password, String role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 }
