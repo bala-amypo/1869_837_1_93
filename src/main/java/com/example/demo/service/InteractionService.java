@@ -5,10 +5,8 @@ import java.util.List;
 
 public interface InteractionService {
 
-    void checkInteractions(List<Long> medicationIds);
-    String getResult(Long resultId);
+    InteractionCheckResult checkInteractions(List<Long> medicationIds);
 
-    InteractionCheckResult save(InteractionCheckResult result);
-    InteractionCheckResult findById(Long id);
-    List<InteractionCheckResult> findAll();
+    InteractionCheckResult getResult(Long id);
+
 }
