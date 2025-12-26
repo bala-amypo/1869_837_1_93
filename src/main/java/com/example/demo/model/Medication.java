@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Medication {
@@ -11,20 +12,25 @@ public class Medication {
 
     private String name;
 
+    @ManyToMany
+    private Set<ActiveIngredient> ingredients;
+
     public Medication(){}
 
-    public Medication(Long id, String name){
-        this.id = id;
-        this.name = name;
-    }
-
-    public Medication(String name){
-        this.name = name;
+    public Medication(Long id, String name, Set<ActiveIngredient> ingredients){
+        this.id=id;
+        this.name=name;
+        this.ingredients=ingredients;
     }
 
     public Long getId(){ return id; }
-    public void setId(Long id){ this.id = id; }
+    public void setId(Long id){ this.id=id; }
 
     public String getName(){ return name; }
-    public void setName(String name){ this.name = name; }
+    public void setName(String name){ this.name=name; }
+
+    public Set<ActiveIngredient> getIngredients(){ return ingredients; }
+    public void setIngredients(Set<ActiveIngredient> ingredients){
+        this.ingredients=ingredients;
+    }
 }
