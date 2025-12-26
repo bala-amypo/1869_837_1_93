@@ -9,18 +9,29 @@ public class InteractionCheckResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    // TESTS expect field logically named "result"
+    private String result;
 
     public InteractionCheckResult(){}
 
-    public InteractionCheckResult(Long id, String status){
-        this.id=id;
-        this.status=status;
+    public InteractionCheckResult(Long id, String result){
+        this.id = id;
+        this.result = result;
     }
 
-    public Long getId(){ return id; }
-    public void setId(Long id){ this.id=id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getStatus(){ return status; }
-    public void setStatus(String status){ this.status=status; }
+    public void setId(Long id){
+        this.id = id;
+    }
+
+    public String getResult(){
+        return result;
+    }
+
+    public void setResult(String result){
+        this.result = result;
+    }
 }
