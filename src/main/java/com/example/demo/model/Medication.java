@@ -23,6 +23,11 @@ public class Medication {
         this.name = name;
     }
 
+    // test needs this
+    public Medication(String name){
+        this.name = name;
+    }
+
     public Long getId(){ return id; }
     public void setId(Long id){ this.id = id; }
 
